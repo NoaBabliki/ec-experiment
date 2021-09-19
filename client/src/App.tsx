@@ -1,41 +1,36 @@
 import React from 'react';
 import './App.css';
 import {createApiClient} from './api'; //connection to server
-import ChooseOptions from './components/ChooseOptions';
 import StartExperiment from './components/StartExperiment';
+import * as constants from './constants.js'
+import FirstStageWrapper from './components/FirstStageWrapper';
 
 
 export type AppState = {
   flow: number,
   category_index: number,
+  max_id: number,
   client_catigories: object[][],
   categories?: object[][],
 }
 
 const api = createApiClient()
+//const apiFlow = createApiClientFlow()
 
 export class App extends React.PureComponent<{}, AppState> {
 
   state: AppState = {
-		flow: 1,
+    flow: 1,
     category_index: 0,
+    max_id: 0,
     client_catigories: [[],[]]
 	}
 
-  /** 
-  dataUpdate = async () => {
-    this.setState({
-			categories: await api.getProperties()
-		});
-    //console.log(this.state.categories)
-	}
-  */
-
   async componentDidMount() {
     this.setState({
-			categories: await api.getProperties(this.state.client_catigories)
+			categories: await api.getProperties(this.state.client_catigories),
 		});
-    //console.log(this.state.categories)
+    this.setState({max_id: this.setMaxCategoryId()})
   }
 
   //from strig array to json array ---> save client data as json
@@ -52,25 +47,59 @@ export class App extends React.PureComponent<{}, AppState> {
     return options_array
   }
 
-  setCategories = async (newCategory: object[]) => {
-    var new_client_categories = this.state.client_catigories.slice(0)
-    new_client_categories[this.state.category_index] = newCategory
-    //console.log('client categories', new_client_categories)
+  setCategoryIndex = () => {
     let add_to_index = 1
     if (this.state.category_index === add_to_index){
       add_to_index = -1
     }
     this.setState({
-      category_index: this.state.category_index + add_to_index,
+      category_index: this.state.category_index + add_to_index
+    })
+  }
+
+  setCategories = async (newCategory: object[]) => {
+    var new_client_categories = this.state.client_catigories.slice(0)
+    new_client_categories[this.state.category_index] = newCategory
+    //console.log('client categories', new_client_categories)
+    this.setState({
       client_catigories: new_client_categories,
       categories: await api.getProperties(new_client_categories)
     })
-    //console.log('client categories after update', this.state.client_catigories)
+    console.log('client categories after update', this.state.client_catigories)
+    console.log('categories:', this.state.categories)
   }
 
   setFlow = () => {
-    this.setState({flow: this.state.flow + 1})
+    this.setState({
+      flow: this.state.flow + 1
+    })
+    console.log(this.state.flow)
   }
+
+  addParticipentOptions = async (new_caterories: object[]) => {
+   // console.log("new categories",new_caterories, "index", this.state.category_index)
+    var new_client_categories = this.state.client_catigories.slice(0)
+    new_client_categories[this.state.category_index] = new_client_categories[this.state.category_index].concat(new_caterories)
+    //console.log("new client categories",new_client_categories)
+    this.setState({
+      client_catigories: new_client_categories,
+      categories: await api.getProperties(new_client_categories)
+    })
+    console.log("categories after adding option:",this.state.categories)
+  }
+
+setMaxCategoryId(){
+  let max_id = constants.MAX_CATEGORY_DISPLAY
+  if (this.state.categories){
+    for (let category of this.state.categories){
+      let temp_id = category.length
+      if (temp_id > max_id){
+        max_id = temp_id
+      }
+    }
+  }
+  return max_id
+}
 
   render() {
     return( 
@@ -81,14 +110,17 @@ export class App extends React.PureComponent<{}, AppState> {
         setFlow={this.setFlow}>
         </StartExperiment> : null}
       </div> 
-      <div>  
-      {(this.state.categories && this.state.flow === 2)?
-      <ChooseOptions key={this.state.category_index} 
-        categories={this.state.categories} 
-        index={this.state.category_index}
+      <div>
+        {(this.state.flow === 2 && this.state.categories)?
+        <FirstStageWrapper
+        categories={this.state.categories}
+        client_categories={this.state.client_catigories}
+        max_id={this.state.max_id}
         setCategories={this.setCategories}
+        addParticipentOptions={this.addParticipentOptions}
+        setCategoryIndex={this.setCategoryIndex}
         setFlow={this.setFlow}>
-      </ChooseOptions> : null}
+        </FirstStageWrapper> : null}
       </div>
     </main>
     )
