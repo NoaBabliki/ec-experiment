@@ -1,5 +1,4 @@
 import {API_PATH, SERVER_API_PORT} from './APIConstants.js'
-import { MAX_CATEGORY_DISPLAY } from './constants.js';
 import express from 'express';
 import fs from 'fs'
 
