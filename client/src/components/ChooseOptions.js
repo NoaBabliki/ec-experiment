@@ -10,19 +10,11 @@ export class ChooseOptions extends React.PureComponent {
         const paginatedData = data.slice(data.length - constants.MAX_CATEGORY_DISPLAY);
         const items_left = data.filter( ( item ) => !paginatedData.includes( item ) );
         this.state = {
-            category: this.setCategory(),
+            category: this.props.setCategory(),
             category_arr: paginatedData,
             category_to_add: items_left,
             category_catche: []
         }
-    }
-
-    setCategory(){
-        if (this.props.index === 0) {
-            return constants.CATEGORY_1
-        }
-        return constants.CATEGORY_2
-        
     }
 
 
@@ -93,7 +85,7 @@ export class ChooseOptions extends React.PureComponent {
             <table>
                     <tbody>
                 {two_d_data.map((d)=> (
-                    <tr>
+                    <tr key={d[0].id}>
                         <td key={d[0].id}>{this.remove_button(d[0])}</td>
                         <td key={d[1].id}>{this.remove_button(d[1])}</td>
                         <td key={d[2].id}>{this.remove_button(d[2])}</td>
@@ -110,9 +102,8 @@ export class ChooseOptions extends React.PureComponent {
 
     nextButtonAction = () => {
         this.props.setCategories(this.state.category_arr)
-        if (this.props.index === 1){
-            this.props.setFlow()
-        }
+        console.log('index:',this.props.index)
+        this.props.setFlow()  
     }
 
    
