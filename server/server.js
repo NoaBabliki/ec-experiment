@@ -1,4 +1,5 @@
 import {API_PATH, SERVER_API_PORT} from './APIConstants.js'
+import { MAX_CATEGORY_DISPLAY } from './constants.js';
 import express from 'express';
 import fs from 'fs'
 
@@ -39,19 +40,19 @@ function stringToJson(str_arr){
     return json_array
 }
 
-function stringToArray(s){
-    return (s.replace(/[^a-zA-Z ,0-9]/g, "").split(','))
-}
+//function stringToArray(s){
+  //  return (s.replace(/[^a-zA-Z ,0-9]/g, "").split(','))
+//}
 
 function save_client_choices(client_categories){
     const files = [OUTPUT_1, OUTPUT_2]
-    console.log(client_categories[0])
+    console.log("client categories length:", client_categories.length)
     for (var i = 0; i < client_categories.length; i++) {
         const category = JSON.parse(client_categories[i])
         console.log(category)
-        var logger = fs.createWriteStream(files[i])
         if (category.length > 1) {
             console.log('writing to file', files[i])
+            var logger = fs.createWriteStream(files[i])
             logger.write('[\n')
             var sep = "";
             category.forEach(function(objectToAppend) {
@@ -60,8 +61,8 @@ function save_client_choices(client_categories){
                     sep = ",\n";
             });
             logger.write('\n]')
-        }
-        logger.end()
+            logger.close()
+        } 
     }
 }
 
@@ -77,14 +78,27 @@ function setCategoryInfo(client_categories){
         category2_to_send = category_client_arr2
     }
 }
-
+/*
+app.get('/flow', function(req, res){
+    let flow = req.query.flow || 1
+    let to_change = req.query.to_change || false
+    console.log(to_change)
+    if (to_change === 'true'){
+        console.log(flow + 1)
+        res.send(flow + 1)
+    }
+    else{
+        res.send(flow)
+    }
+})
+*/
 
 app.get(API_PATH, function(req, res){
     const client_categories = req.query.client_categories
     save_client_choices(client_categories)
-    console.log('category 1 before changing',category1_to_send.length)
+    console.log('category 1 before changing',category1_to_send)
     setCategoryInfo(client_categories)
-    console.log('category 1 after changing',category1_to_send.length)
+    console.log('category 1 after changing',category1_to_send)
     res.send([category1_to_send, category2_to_send])
 })
 
