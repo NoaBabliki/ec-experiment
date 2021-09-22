@@ -2,6 +2,8 @@ import React from 'react'
 import * as constants from '../constants.js'
 import ReactSlider from "react-slider";
 
+const marks = [constants.MIN_RATING, constants.MAX_RATING]
+
 export class Slider extends React.Component {
 
     constructor(props){
@@ -32,20 +34,23 @@ export class Slider extends React.Component {
         }   
     }
 
+
     render() {
         return (
+            <div>
             <ReactSlider
                         className="horizontal-slider"
                         thumbClassName="example-thumb"
                         trackClassName="example-track"
                         disabled={this.props.disabled} //create disable prop or state
-                        marks
                         min={constants.MIN_RATING}
                         max={constants.MAX_RATING}
-                        value={this.state.current_rating}
+                        valueLabelDisplay="on"
+                        defaultValue={this.defaultRating()}
                         renderThumb={(props, state) => <div {...props} onChange={this.sliderChange(state.valueNow)}>{state.valueNow}</div>}
                         //renderTrack={(props, state) => <div {...props} />}//custom track
                     />
+                </div>
         )
     }
     

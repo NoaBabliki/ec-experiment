@@ -1,6 +1,8 @@
 import React from 'react'
 import Slider from './Slider.js'
 
+const INSTRUCTIONS = 'These are your preferences for the options presented. You may adjust them now to your liking.'
+
 export class OverallRatings extends React.Component {
 
     constructor(props){
@@ -44,13 +46,12 @@ export class OverallRatings extends React.Component {
     }
 
     showOption(option, index){
-        //console.log("current option", option)
         return(
         <div>
-            <h4>{option.name}:</h4>
+            <h4 className='option-name'>{option.name}:</h4>
             {option? 
             <Slider
-                key={index}
+                key={option.id.toString()}
                 index={index}
                 disabled={false}
                 default_rating={option.rating}
@@ -78,8 +79,9 @@ export class OverallRatings extends React.Component {
     render() {
         return(
             <div>
+                <h3 className='instructions'>{INSTRUCTIONS}</h3>
                 {this.props.categories? this.showAllOptions() : null}
-                <button onClick={()=>{this.nextButtonAction()}}>next</button>
+                <button className='next-button' onClick={()=>{this.nextButtonAction()}}>next</button>
             </div>
         )
     }

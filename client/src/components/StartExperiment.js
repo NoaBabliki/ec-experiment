@@ -2,46 +2,34 @@ import React from 'react'
 import '../App.css'
 import * as constants from '../constants.js'
 
+const FIRST_TITLE = 'Welcome'
+const SECOND_TITLE = 'What do you prefer?'
+const THIRD_TITLE = 'Instructions'
+const CLASS_NAME_WELCOME = 'title-1'
+const CLASS_NAME_INSTRUCTIONS = 'title-2'
+
 export class StartExperiment extends React.PureComponent {
     constructor(props){
         super(props)
         this.state = {
-            page: 1
+            page: 1,
         }
     }
 
-    welcomePage = () => {
+    showPage = (title, instructions, className) => {
         return(
             <div>
-            <h1>Welcome</h1>
-            <h2>Press the 'next' button to continue</h2>
+            <h1 className={className}>{title}</h1>
+            <h2 className='instructions'>{instructions}</h2>
+            <h2 className='continue'>Press the 'next' button to continue</h2>
             {this.nextButton()}
-            </div>
-        )
-    }
-
-    titlePage = () => {
-        return(
-            <div>
-                <h1>What do you prefer?</h1>
-                {this.nextButton()}
-            </div>
-        )
-    }
-
-    instructionsPage = () => {
-        return (
-            <div>
-                <h1>Instructions</h1>
-                <h3>{constants.INSTRUCTIONS}</h3>
-                {this.nextButton()}
             </div>
         )
     }
 
     nextButton = () => {
         return (
-            <button onClick={() => {this.nextButtonAction()}}>next</button>
+            <button className='next-button' onClick={() => {this.nextButtonAction()}}>next</button>
         )
     }
 
@@ -57,11 +45,11 @@ export class StartExperiment extends React.PureComponent {
         return (
             <div>
                 {this.state.page === 1?
-                this.welcomePage() : 
+                this.showPage(FIRST_TITLE, '', CLASS_NAME_WELCOME) : 
                 this.state.page === 2?
-                this.titlePage() : 
+                this.showPage(SECOND_TITLE, '', CLASS_NAME_WELCOME) : 
                 this.state.page === 3?
-                this.instructionsPage() :
+                this.showPage(THIRD_TITLE, constants.INSTRUCTIONS, CLASS_NAME_INSTRUCTIONS) :
                 null}
             </div>
         )

@@ -4,7 +4,6 @@ import ChooseOptions from './ChooseOptions';
 import AddCustomItems from './AddCustomItems';
 import RateOptions from './RateOptions';
 import OverallRatings from './OverallRatings.js';
-//import OverallRatings from './components/OverallRatings';
 
 export class FirstStageWrapper extends React.Component {
 
@@ -17,9 +16,9 @@ export class FirstStageWrapper extends React.Component {
         this.setFlow = this.setFlow.bind(this)
     }
 
+
     setFlow(){
         this.setState({flow: this.state.flow + 1})
-        //console.log('flow for first segment', this.state.flow)
     }
 
     setCategoryIndex(){
@@ -29,8 +28,6 @@ export class FirstStageWrapper extends React.Component {
                 flow: 1,
             })
             this.props.setCategoryIndex()
-           // console.log('index for first segment', this.state.category_index)
-            //console.log('flow for first segment', this.state.flow)
         }
         else{
             this.props.setFlow()
@@ -44,10 +41,11 @@ export class FirstStageWrapper extends React.Component {
     
 
     render() {
+        let flow = this.state.flow
         return(
         <main>
         <div>  
-      {(this.props.categories && this.state.flow === 1)?
+      {(this.props.categories && flow === 1)?
       <ChooseOptions key={this.state.category_index} 
         categories={this.props.categories} 
         index={this.state.category_index}
@@ -57,7 +55,7 @@ export class FirstStageWrapper extends React.Component {
       </ChooseOptions> : null}
       </div>
       <div>
-        {this.state.flow === 2?
+        {flow === 2?
         <AddCustomItems
         key={this.state.category_index}
         index={this.state.category_index}
@@ -68,7 +66,7 @@ export class FirstStageWrapper extends React.Component {
         setFlow={this.setFlow}>
         </AddCustomItems> : null}
       </div>
-      <div>{(this.state.flow === 3 && this.props.categories)?
+      <div>{(flow === 3 && this.props.categories)?
       <RateOptions
       key={this.state.category_index}
       index={this.state.category_index}
@@ -79,7 +77,7 @@ export class FirstStageWrapper extends React.Component {
       </RateOptions> : null}
       </div>
       <div>
-        {(this.state.flow === 4 && this.props.categories)?
+        {(flow === 4 && this.props.categories)?
        <OverallRatings
        key={this.state.category_index}
        index={this.state.category_index}
@@ -90,7 +88,7 @@ export class FirstStageWrapper extends React.Component {
        </OverallRatings>: null}
       </div>
       <div>
-          {this.state.flow === 5? this.setCategoryIndex(): null}
+          {flow === 5? this.setCategoryIndex(): null}
       </div>
         </main>)
     }

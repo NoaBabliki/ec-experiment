@@ -36,7 +36,11 @@ export class RateSingleOptionWrapper extends React.Component {
 
     instructions(){
         return (
-            <h3>What is your preference for {this.props.option.name}?</h3>
+            <div>
+            <h3 className='instructions'>What is your preference for</h3>
+            <h3 className='category-name'>{this.props.option.name}</h3>
+            <h3 className='instructions'>?</h3>
+            </div>
         )
     }
 
@@ -52,7 +56,7 @@ export class RateSingleOptionWrapper extends React.Component {
         return (
             <div>
             {this.props.option? this.main() : null}
-            <button disabled={this.state.disable_next_button} 
+            <button className='next-button' disabled={this.state.disable_next_button} 
                 onClick={()=>{this.nextButtonAction()}}>next</button>
             </div>
         )

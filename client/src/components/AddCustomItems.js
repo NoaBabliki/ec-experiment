@@ -4,6 +4,13 @@ import * as constants from '../constants.js'
 //import ReactSlider from "react-slider";
 import Slider from './Slider';
 
+const INSTRUCTIONS_PART_1 = 'In addition to the previous options, you can add'
+const INSTRUCTIONS_PART_2 = 'more options of your own to category'
+const INSTRUCTIONS_PART_3 = 'Please add options that are close to the edges of the preference scale - very highly preferred (close to'
+const INSTRUCTIONS_PART_4 = ') or very lowly preferred (close to'
+const INSTRUCTIONS_PART_5 = ').'
+const INSTRUCTIONS_PART_6 = 'Please add an option and rate it (option'
+const INSTRUCTIONS_PART_7 = 'out of'
 
 export class AddCustomItems extends React.PureComponent {
 
@@ -49,11 +56,17 @@ export class AddCustomItems extends React.PureComponent {
 
         return(
             <div>
-            <h3>In addition to the previous options, you can add {constants.NUM_CUSTOM_OPTIONS} more 
-            options of your own to category {this.state.category_name}.</h3>
-            <h3>Please add options that are close to the edges of the preference scale - 
-                very highly preferred (close to {constants.MAX_RATING}) or very lowly preferred (close to {constants.MIN_RATING}).</h3>
-            <h3>Please add an option and rate it (option {this.desplayIndex()} out of {constants.NUM_CUSTOM_OPTIONS}).</h3>
+            <h3 className='instructions'>{INSTRUCTIONS_PART_1}</h3>
+            <h3 className='category-name'>{constants.NUM_CUSTOM_OPTIONS}</h3>  
+            <h3 className='instructions'>{INSTRUCTIONS_PART_2}</h3>
+            <h3 className='category-name'>{this.state.category_name}.</h3>
+            <h3 className='instructions'>{INSTRUCTIONS_PART_3}{constants.MAX_RATING}
+            {INSTRUCTIONS_PART_4}{constants.MIN_RATING}{INSTRUCTIONS_PART_5}</h3>
+            <h3 className='instructions'> {INSTRUCTIONS_PART_6}</h3>
+            <h3 className='category-name'>{this.desplayIndex()}</h3>
+            <h3 className='instructions'>{INSTRUCTIONS_PART_7}</h3>
+            <h3 className='category-name'>{constants.NUM_CUSTOM_OPTIONS}</h3>
+            <h3 className='instructions'>{INSTRUCTIONS_PART_5}</h3>
             </div>
         )
     }
@@ -78,9 +91,6 @@ export class AddCustomItems extends React.PureComponent {
         console.log(this.state.options_added)
         if (this.state.current_option_index + 1 === constants.NUM_CUSTOM_OPTIONS){
             this.props.addParticipentOptions(this.state.options_added)
-            //console.log('options added:', this.state.options_added)
-            //console.log('index:', this.props.index)
-            //console.log('this.props.numCtegories', this.props.numCategories)
             this.setState({
                 disable_option_adding: true
             })
@@ -110,14 +120,14 @@ export class AddCustomItems extends React.PureComponent {
         let disable_submit = this.disableSubmit() 
         return(
             <div>
-                <label>
+                <label className='instructions'>
                     Option Name: 
-                    <input type="text" disabled={this.state.disable_option_adding} value={this.state.current_option_name} onChange={this.handleChange}></input>
+                    <input className='instructions' type="text" disabled={this.state.disable_option_adding} value={this.state.current_option_name} onChange={this.handleChange}></input>
                 </label>
                 <div>
                 {this.optionSlider()}
                 </div>
-                <input type="submit" value="submit" disabled={disable_submit} onClick={this.handleSubmit}></input>
+                <input className='submit-button' type="submit" value="submit" disabled={disable_submit} onClick={this.handleSubmit}></input>
             </div>
         )
 
@@ -156,7 +166,7 @@ export class AddCustomItems extends React.PureComponent {
                 this.main() : this.nextButtonAction()}
                 {this.state.current_option_index !== constants.NUM_CUSTOM_OPTIONS?
                 null : this.disableNextButton()}
-                <button disabled={this.state.disable_next_button} 
+                <button className='next-button' disabled={this.state.disable_next_button} 
                 onClick={()=>{this.nextButtonAction()}}>next</button>
             </div>
         )
