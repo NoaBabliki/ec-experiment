@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import {createApiClient} from './api'; //connection to server
 import StartExperiment from './components/StartExperiment';
@@ -60,27 +60,21 @@ export class App extends React.PureComponent<{}, AppState> {
   setCategories = async (newCategory: object[]) => {
     var new_client_categories = this.state.client_catigories.slice(0)
     new_client_categories[this.state.category_index] = newCategory
-    //console.log('client categories', new_client_categories)
     this.setState({
       client_catigories: new_client_categories,
       categories: await api.getProperties(new_client_categories)
     })
-    console.log('client categories after update', this.state.client_catigories)
-    console.log('categories:', this.state.categories)
   }
 
   setFlow = () => {
     this.setState({
       flow: this.state.flow + 1
     })
-    console.log(this.state.flow)
   }
 
   addParticipentOptions = async (new_caterories: object[]) => {
-   // console.log("new categories",new_caterories, "index", this.state.category_index)
     var new_client_categories = this.state.client_catigories.slice(0)
     new_client_categories[this.state.category_index] = new_client_categories[this.state.category_index].concat(new_caterories)
-    //console.log("new client categories",new_client_categories)
     this.setState({
       client_catigories: new_client_categories,
       categories: await api.getProperties(new_client_categories)
@@ -102,6 +96,7 @@ setMaxCategoryId(){
 }
 
   render() {
+    localStorage.clear()
     return( 
     <main>   
       <div>
