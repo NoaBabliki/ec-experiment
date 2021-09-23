@@ -85,17 +85,13 @@ export class ChooseOptions extends React.PureComponent {
         var two_d_data = []
         const category_arr_copy = this.state.category_arr.slice(0)
         while(category_arr_copy.length) two_d_data.push(category_arr_copy.splice(0,n_cols));
-        //console.log('after copy', this.state.category_arr)
         return (
             <div>
             <table>
                     <tbody>
-                {two_d_data.map((d)=> (
-                    <tr key={d[0].id}>
-                        <td key={d[0].id}>{this.remove_button(d[0])}</td>
-                        <td key={d[1].id}>{this.remove_button(d[1])}</td>
-                        <td key={d[2].id}>{this.remove_button(d[2])}</td>
-                        <td key={d[3].id}>{this.remove_button(d[3])}</td>
+                {two_d_data.map((d, i)=> (
+                    <tr key={i}>
+                        {d.map((option, index) => this.showOption(option, index))}
                     </tr>))}
                     </tbody>
                 </table>
@@ -103,6 +99,12 @@ export class ChooseOptions extends React.PureComponent {
                     {this.noMoreAlternativesMsg()}
                 </div>
                 </div>
+        )
+    }
+
+    showOption = (option, index) => {
+        return (
+            <td key={index}>{this.remove_button(option)}</td>
         )
     }
 
