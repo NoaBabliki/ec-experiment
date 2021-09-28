@@ -1,4 +1,4 @@
-import {API_PATH, SERVER_API_PORT} from './APIConstants.js'
+import {API_PATH, SERVER_API_PORT, CHOICES_API_PATH} from './APIConstants.js'
 import express from 'express';
 import fs from 'fs'
 
@@ -6,6 +6,7 @@ const INPUT_1 = './inputs/category1.txt'
 const INPUT_2 = './inputs/category2.txt'
 const OUTPUT_1 = './outputs/client_category1.json'
 const OUTPUT_2 = './outputs/client_category2.json'
+const FINAL_OUTPUT = './outputs/equivalent_choices.json'
 
 const app = express();
 
@@ -39,6 +40,7 @@ function stringToJson(str_arr){
     return json_array
 }
 
+
 //function stringToArray(s){
   //  return (s.replace(/[^a-zA-Z ,0-9]/g, "").split(','))
 //}
@@ -50,19 +52,23 @@ function save_client_choices(client_categories){
         const category = JSON.parse(client_categories[i])
         console.log(category)
         if (category.length > 1) {
-            console.log('writing to file', files[i])
-            var logger = fs.createWriteStream(files[i])
-            logger.write('[\n')
-            var sep = "";
-            category.forEach(function(objectToAppend) {
-                logger.write(sep + JSON.stringify(objectToAppend))
-                if (!sep)
-                    sep = ",\n";
-            });
-            logger.write('\n]')
-            logger.close()
+            save_to_file(files[i], category)
         } 
     }
+}
+
+function save_to_file(path, array_of_objects) {
+    console.log('writing to file', path)
+    var logger = fs.createWriteStream(path)
+    logger.write('[\n')
+    var sep = "";
+    array_of_objects.forEach(function(objectToAppend) {
+        logger.write(sep + JSON.stringify(objectToAppend))
+        if (!sep)
+            sep = ",\n";
+    });
+    logger.write('\n]')
+    logger.close()
 }
 
 function setCategoryInfo(client_categories){
@@ -77,27 +83,32 @@ function setCategoryInfo(client_categories){
         category2_to_send = category_client_arr2
     }
 }
-/*
-app.get('/flow', function(req, res){
-    let flow = req.query.flow || 1
-    let to_change = req.query.to_change || false
-    console.log(to_change)
-    if (to_change === 'true'){
-        console.log(flow + 1)
-        res.send(flow + 1)
+
+function choisesStringToObjects(equivalent_choices){
+    let ec_arr = []
+    for (let i = 0; i < equivalent_choices.length; i++){
+        console.log(equivalent_choices[i])
+        let temp = JSON.parse(equivalent_choices[i])
+        ec_arr.push(temp)
     }
-    else{
-        res.send(flow)
-    }
+    console.log('ec_arr', ec_arr)
+    return ec_arr
+}
+
+app.get(CHOICES_API_PATH, function(req, res){
+    const equivalent_choices = req.query.equivalent_choices 
+    console.log('before parse', equivalent_choices)
+   // choisesStringToObjects(String(equivalent_choices))
+    save_to_file(FINAL_OUTPUT, choisesStringToObjects(equivalent_choices))
+    res.send(equivalent_choices)
 })
-*/
 
 app.get(API_PATH, function(req, res){
     const client_categories = req.query.client_categories
     save_client_choices(client_categories)
-    console.log('category 1 before changing',category1_to_send)
+   // console.log('category 1 before changing',category1_to_send)
     setCategoryInfo(client_categories)
-    console.log('category 1 after changing',category1_to_send)
+   // console.log('category 1 after changing',category1_to_send)
     res.send([category1_to_send, category2_to_send])
 })
 
