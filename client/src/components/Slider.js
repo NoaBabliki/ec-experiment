@@ -2,7 +2,6 @@ import React from 'react'
 import * as constants from '../constants.js'
 import ReactSlider from "react-slider";
 
-const marks = [constants.MIN_RATING, constants.MAX_RATING]
 
 export class Slider extends React.Component {
 

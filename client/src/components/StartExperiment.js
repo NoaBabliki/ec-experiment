@@ -1,12 +1,9 @@
 import React from 'react'
 import '../App.css'
-import * as constants from '../constants.js'
 
-const FIRST_TITLE = 'Welcome'
-const SECOND_TITLE = 'What do you prefer?'
-const THIRD_TITLE = 'Instructions'
 const CLASS_NAME_WELCOME = 'title-1'
 const CLASS_NAME_INSTRUCTIONS = 'title-2'
+const INSTRUCTIONS_TITLE = 'Instructions'
 
 export class StartExperiment extends React.PureComponent {
     constructor(props){
@@ -44,12 +41,14 @@ export class StartExperiment extends React.PureComponent {
     render(){
         return (
             <div>
-                {this.state.page === 1?
-                this.showPage(FIRST_TITLE, '', CLASS_NAME_WELCOME) : 
+                {(this.props.flow === 3 && this.state.page === 1)?
+                this.setState({page: this.state.page + 1}) :
+                this.state.page === 1?
+                this.showPage(this.props.first_title, '', CLASS_NAME_WELCOME) : 
                 this.state.page === 2?
-                this.showPage(SECOND_TITLE, '', CLASS_NAME_WELCOME) : 
+                this.showPage(this.props.second_title, '', CLASS_NAME_WELCOME) : 
                 this.state.page === 3?
-                this.showPage(THIRD_TITLE, constants.INSTRUCTIONS, CLASS_NAME_INSTRUCTIONS) :
+                this.showPage(INSTRUCTIONS_TITLE, this.props.instructions, CLASS_NAME_INSTRUCTIONS) :
                 null}
             </div>
         )

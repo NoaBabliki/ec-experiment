@@ -11,7 +11,6 @@ const WARNING_MSG = 'No more alternatives to choose from.'
 export class ChooseOptions extends React.PureComponent {
     constructor(props){
         super(props)
-        //change to fit json format
         const data = this.props.categories[this.props.index].sort(function(){ return Math.random() - 0.5});
         const paginatedData = data.slice(data.length - constants.MAX_CATEGORY_DISPLAY);
         const items_left = data.filter( ( item ) => !paginatedData.includes( item ) );
@@ -80,14 +79,13 @@ export class ChooseOptions extends React.PureComponent {
 
 
     createTable(){
-        console.log(this.state.category_arr)
         const n_cols = 4
         var two_d_data = []
         const category_arr_copy = this.state.category_arr.slice(0)
         while(category_arr_copy.length) two_d_data.push(category_arr_copy.splice(0,n_cols));
         return (
             <div>
-            <table>
+            <table className='table-border'>
                     <tbody>
                 {two_d_data.map((d, i)=> (
                     <tr key={i}>

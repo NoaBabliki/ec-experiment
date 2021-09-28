@@ -2,6 +2,7 @@ import React from 'react'
 import Slider from './Slider.js'
 
 const INSTRUCTIONS = 'These are your preferences for the options presented. You may adjust them now to your liking.'
+const INDEX_DEV = 1
 
 export class OverallRatings extends React.Component {
 
@@ -18,8 +19,8 @@ export class OverallRatings extends React.Component {
         console.log("options from create array:",options)
         const num_options = options.length
         let ratings = new Array(num_options + 1).fill(0)
-        for (let i = 1; i<num_options+1; i++){
-            ratings[i] = options[i-1].rating
+        for (let i = INDEX_DEV; i<num_options+INDEX_DEV; i++){
+            ratings[i] = options[i-INDEX_DEV].rating
         }
         console.log("ratings from createRating",ratings)
         return (ratings)
@@ -34,20 +35,30 @@ export class OverallRatings extends React.Component {
             }) 
         }
     }
-
+    //create 2d array and show in table!
     showAllOptions(){
-        const options = this.props.client_categories[this.props.index]
-        return(
+        const n_cols = 2
+        var two_d_data = []
+        const category_arr_copy = this.props.client_categories[this.props.index].slice(0)
+        while(category_arr_copy.length) two_d_data.push(category_arr_copy.splice(0,n_cols));
+       // console.log(two_d_data)
+        return (
             <div>
-                {options.map((option, index) => this.showOption(option, index + 1))}
-            </div>
+            <table className='table-no-border'>
+                    <tbody>
+                {two_d_data.map((d, i)=> (
+                    <tr key={i} className='table-no-border'>
+                        {d.map((option, index) => this.showOption(option, index + INDEX_DEV + (i*n_cols)))}
+                    </tr>))}
+                    </tbody>
+                </table>
+                </div>
         )
-        
     }
 
     showOption(option, index){
         return(
-        <div>
+        <td className='table-no-border'>
             <h4 className='option-name'>{option.name}:</h4>
             {option? 
             <Slider
@@ -57,19 +68,19 @@ export class OverallRatings extends React.Component {
                 default_rating={option.rating}
                 getValue={this.sliderChange}>
             </Slider>: null}
-        </div>            
+        </td>            
         )
     }
 
     nextButtonAction(){
         const options = this.props.client_categories[this.props.index]
-        console.log('client categories from next button:', options)
+       // console.log('client categories from next button:', options)
         const num_options = options.length
         let newOptions = options.slice(0)
         for (let i = 0; i < num_options; i++){
-            newOptions[i].rating = this.state.ratings[i+1]
-            console.log('rating at index', i+1, 'is', this.state.ratings[i+1])
-            console.log('category:', newOptions[i], 'new rating:', this.state.ratings[i+1])
+            newOptions[i].rating = this.state.ratings[i + INDEX_DEV]
+            //console.log('rating at index', i+INDEX_DEV, 'is', this.state.ratings[i+INDEX_DEV])
+            //console.log('category:', newOptions[i], 'new rating:', this.state.ratings[i+INDEX_DEV])
         }
         this.props.setCategories(newOptions)
         this.props.setFlow()
