@@ -1,9 +1,13 @@
 export const CATEGORY_1 = "Concert tickets"
 export const CATEGORY_2 = "Workshops"
-//export const SHOW_OPTIONS_PAGE = 2 //number of times to show options page
+export const CATEGORY_1_SINGULAR = "Concert ticket"
+export const CATEGORY_2_SINGULAR = "Workshop"
 export const MAX_CATEGORY_DISPLAY = 4
-export const INSTRUCTIONS = "In this task, we ask you to rate your preferences in a given category. You will see different options in a given category. Please rate them one by one on a scale of 1-1000."
 export const NUM_CUSTOM_OPTIONS = 1 //number of custom options the participent can add to each category
 export const MIN_RATING = 1
 export const MAX_RATING = 1000
-export const RATING_MARGIN = 100 // how close do we want the rating of the new options to be to the min/max values
+export const RATING_MARGIN = 200 // how close do we want the rating of the new options to be to the min/max values
+export const MINIMAL_TIME = 1 //in seconds
+export const N_MATCHES = 3
+export const N_SETS = 2
+export const ATTENTION_TRIALS = 10 //presentage of trials to be attention trails
