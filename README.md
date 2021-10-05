@@ -1,8 +1,10 @@
 in progress...
 
-# ec-experiment
+# eqivalent choices - experiment
 
-right now working on the first part - not yes finished
+almost done!
+* need to decide if we use auto-complete or drop down menu for the second part fill-in
+* need to finish local storage to store temporary data while website is running to prevent web page refresh bug
 
 this version is without moduls - for react, express and axios - need to download before running
 terminal run command: npm run dev
