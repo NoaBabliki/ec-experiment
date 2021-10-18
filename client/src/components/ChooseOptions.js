@@ -24,12 +24,9 @@ export class ChooseOptions extends React.PureComponent {
 
 
     setCategoryArray(to_remove){
-        console.log(to_remove)
         var to_remove_index = this.state.category_arr.findIndex(item => item === to_remove)
         var new_category_arr = this.state.category_arr.slice(0)
-        console.log('category to add 0', this.state.category_to_add[0], '\nto remove index:', to_remove_index)
         new_category_arr[to_remove_index] = this.state.category_to_add[0]
-        console.log('after change', new_category_arr)
         this.setState({category_arr: new_category_arr,
         category_catche: this.state.category_catche.concat([[to_remove, to_remove_index]]),
         category_to_add: this.state.category_to_add.slice(1)
@@ -108,7 +105,6 @@ export class ChooseOptions extends React.PureComponent {
 
     nextButtonAction = () => {
         this.props.setCategories(this.state.category_arr)
-        console.log('index:',this.props.index)
         this.props.setFlow()  
     }
 

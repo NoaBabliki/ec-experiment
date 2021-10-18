@@ -10,7 +10,6 @@ export class Slider extends React.Component {
         this.state = {
             current_rating: this.defaultRating(),
         }
-        //console.log('slider constructor',this.state.current_rating)
     }
 
     defaultRating(){
@@ -18,17 +17,15 @@ export class Slider extends React.Component {
     }
 
     sliderChange(value) {
-      //  console.log('value:',value)
         if (this.state.current_rating !== value){
             this.setState({
                 current_rating: value,
             })
             if (this.props.index){
-            //console.log('index from slider', this.props.index)
             this.props.getValue(value, this.props.index)
             }
             else{
-                this.props.getValue(value) // make a props to recieve value
+                this.props.getValue(value)
             } 
         }   
     }
@@ -47,7 +44,6 @@ export class Slider extends React.Component {
                         valueLabelDisplay="on"
                         defaultValue={this.defaultRating()}
                         renderThumb={(props, state) => <div {...props} onChange={this.sliderChange(state.valueNow)}>{state.valueNow}</div>}
-                        //renderTrack={(props, state) => <div {...props} />}//custom track
                     />
                 </div>
         )

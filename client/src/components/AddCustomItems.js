@@ -1,7 +1,6 @@
 import React from 'react'
 import '../App.css'
 import * as constants from '../constants.js'
-//import ReactSlider from "react-slider";
 import Slider from './Slider';
 
 const INSTRUCTIONS_PART_1 = 'In addition to the previous options, you can add'
@@ -28,6 +27,14 @@ export class AddCustomItems extends React.PureComponent {
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.sliderChange = this.sliderChange.bind(this);
+    }
+
+    componentDidUpdate(){
+        if ((localStorage.getItem('option_index')) && this.state.flow !== parseInt(String(localStorage.getItem('option_index')), 10)){
+            this.setState({
+                current_option_index: parseInt(String(localStorage.getItem('option_index')), 10)
+            })
+        }
     }
 
     main(){
@@ -77,6 +84,7 @@ export class AddCustomItems extends React.PureComponent {
     }
 
     handleSubmit(event){
+        localStorage.setItem('option_index', this.state.current_option_index + 1)
         let newOption = {
             id: this.props.maxId + this.state.current_option_index,
             name: this.state.current_option_name,
@@ -88,7 +96,6 @@ export class AddCustomItems extends React.PureComponent {
             current_option_name: "",
             current_option_rating: this.setRatingToMiddle(),
         })
-        console.log(this.state.options_added)
         if (this.state.current_option_index + 1 === constants.NUM_CUSTOM_OPTIONS){
             this.props.addParticipentOptions(this.state.options_added)
             this.setState({
@@ -117,7 +124,7 @@ export class AddCustomItems extends React.PureComponent {
 
     //get input
     addOption(){
-        let disable_submit = this.disableSubmit() 
+        let disable_submit = this.disableSubmit()
         return(
             <div>
                 <label className='instructions'>
@@ -152,6 +159,7 @@ export class AddCustomItems extends React.PureComponent {
     }
 
     nextButtonAction(){
+        localStorage.removeItem('option_index')
         this.props.setFlow()
     }
 

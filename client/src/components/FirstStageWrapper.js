@@ -15,14 +15,44 @@ export class FirstStageWrapper extends React.Component {
         }
         this.setFlow = this.setFlow.bind(this)
     }
+    
+    componentDidMount() {
+        if ((localStorage.getItem('second_stage_flow')) && this.state.flow !== parseInt(String(localStorage.getItem('second_stage_flow')), 10)){
+            this.setState({
+                flow: parseInt(String(localStorage.getItem('second_stage_flow')), 10)
+            })
+        }
+        if ((localStorage.getItem('category_index')) && this.state.category_index !== parseInt(String(localStorage.getItem('category_index')), 10)){
+            this.setState({
+                category_index: parseInt(String(localStorage.getItem('category_index')), 10)
+            })
+        }
+      }
+
+    componentDidUpdate(){
+
+        if ((localStorage.getItem('second_stage_flow')) && this.state.flow !== parseInt(String(localStorage.getItem('second_stage_flow')), 10)){
+            this.setState({
+                flow: parseInt(String(localStorage.getItem('second_stage_flow')), 10)
+            })
+        }
+        if ((localStorage.getItem('category_index')) && this.state.category_index !== parseInt(String(localStorage.getItem('category_index')), 10)){
+            this.setState({
+                category_index: parseInt(String(localStorage.getItem('category_index')), 10)
+            })
+        }
+    }
 
 
     setFlow(){
+        localStorage.setItem('second_stage_flow', this.state.flow + 1)
         this.setState({flow: this.state.flow + 1})
     }
 
     setCategoryIndex(){
+        localStorage.removeItem('second_stage_flow')
         if (this.state.category_index + 1 < this.props.categories.length){
+            localStorage.setItem('category_index', this.state.category_index + 1)
             this.setState({
                 category_index: this.state.category_index + 1,
                 flow: 1,
@@ -30,6 +60,7 @@ export class FirstStageWrapper extends React.Component {
             this.props.setCategoryIndex()
         }
         else{
+            localStorage.removeItem('category_index')
             this.props.setFlow()
         }
     }

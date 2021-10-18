@@ -2,6 +2,7 @@ import React from 'react'
 import '../App.css'
 import * as constants from '../constants.js'
 import CompareTwoOptions from './CompareTwoOptions'
+import ThankYouScreen from './ThankYouScreen'
 
 export class SecondStageWrapper extends React.PureComponent {
 
@@ -14,8 +15,18 @@ export class SecondStageWrapper extends React.PureComponent {
             cur_set_array:[],
             choices: [],
             cur_option: [],
+            cur_set_categories: this.props.categories
         }
         this.setFlow = this.setFlow.bind(this)
+    }
+
+
+    componentDidUpdate(){
+        if ((localStorage.getItem('cur_set')) && this.state.cur_set !== parseInt(String(localStorage.getItem('cur_set')), 10)){
+            this.setState({
+                cur_set: parseInt(String(localStorage.getItem('cur_set')), 10)
+            })
+        }
     }
 
     getOptionForNextMatch(option1, option2, attr_chosen){
@@ -33,21 +44,36 @@ export class SecondStageWrapper extends React.PureComponent {
         return (option_to_return)
     }
 
+    findItemsToRemove(choices){
+        for (let i = 0; i < 2; i++){
+            if (choices.option1[i] === null){
+                return (choices.option2)
+            }
+            if (choices.option2[i] === null){
+                return (choices.option1)
+            }
+        }
+    }
+
     setFlow(choices){
-        console.log(choices)
         this.setState({
             index: this.state.index + 1,
         })
         if (this.state.cur_match < constants.N_MATCHES){
+            let new_cur_set_categories = this.state.cur_set_categories.map(array_item => 
+                array_item.filter(item => 
+                    (!this.findItemsToRemove(choices).includes(item))))
             let new_cur_array = this.state.cur_set_array.slice(0)
             new_cur_array.push(choices)
             this.setState({
                 cur_match: this.state.cur_match + 1,
                 cur_option: this.getOptionForNextMatch(choices.option1, choices.option2, choices.attr_chosen),
                 cur_set_array: new_cur_array,
+                cur_set_categories: new_cur_set_categories,
             })
         }
         else if (this.state.cur_set <= constants.N_SETS) {
+            localStorage.setItem('cur_set', this.state.cur_set + 1)
             this.getOptionForNextMatch(choices.option1, choices.option2, choices.attr_chosen)
             this.state.cur_set_array.push(choices)
             let new_choices = this.state.choices.slice(0)
@@ -57,26 +83,31 @@ export class SecondStageWrapper extends React.PureComponent {
                 cur_set: this.state.cur_set + 1,
                 cur_set_array: [],
                 choices: new_choices,
+                cur_set_categories: this.props.categories
             })
             this.props.setChoices(new_choices)
         }
         else {
             this.props.setChoices(this.state.choices)
-            //this.props.setFlow()
         }
     }
 
     render(){
         return (
-            <CompareTwoOptions
-            key={this.state.index}
-            index={this.state.index}
-            cur_match={this.state.cur_match}
-            cur_set={this.state.cur_set}
-            categories={this.props.categories}
-            cur_option={this.state.cur_option}
-            setFlow={this.setFlow}>
-            </CompareTwoOptions>
+            <div>
+                {(this.state.cur_set <= constants.N_SETS)? 
+                <CompareTwoOptions
+                key={this.state.index}
+                index={this.state.index}
+                cur_match={this.state.cur_match}
+                cur_set={this.state.cur_set}
+                categories={this.state.cur_set_categories}
+                categories_to_choose={this.props.categories}
+                cur_option={this.state.cur_option}
+                setFlow={this.setFlow}>
+                </CompareTwoOptions> :
+                <ThankYouScreen/>}
+            </div>
         )
     }
 

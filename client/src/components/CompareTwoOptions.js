@@ -35,7 +35,6 @@ export class CompareTwoOptions extends React.PureComponent{
     }
 
     fillOneOption(attr_array, rand_index, start_rand, end_rand, start_op, end_op, arrays, half_length){   
-
         for (let i = start_op; i < end_op; i++){
             attr_array[i] = this.props.cur_option[i%half_length]
         }
@@ -113,7 +112,6 @@ export class CompareTwoOptions extends React.PureComponent{
     saveAndContinue(answer){
         const currentTime = (new Date()).getTime();
         const reaction_time = currentTime - this.mountTime // save the reaction time
-        console.log('attr_arr ', this.state.attr_array)
         const updated_set = {
             id: this.props.index,
             cur_match: this.props.cur_match,
@@ -124,8 +122,6 @@ export class CompareTwoOptions extends React.PureComponent{
             reaction_time: reaction_time,
             is_equivalent: answer,
         }
-        console.log(updated_set.option1)
-        console.log(updated_set.option2)
         this.props.setFlow(updated_set)
     }
 
@@ -141,7 +137,6 @@ export class CompareTwoOptions extends React.PureComponent{
                 cur_chosen: null,
                 disable_next: true
             })
-            alert(WARNING_MAG)
         }
 
     }
@@ -151,7 +146,6 @@ export class CompareTwoOptions extends React.PureComponent{
         const currentTime = (new Date()).getTime();
         if ((currentTime > (this.mountTime + (to_seconds * constants.MINIMAL_TIME)))){
             this.setState({disable_next: false})
-            //console.log('time diff', currentTime - this.mountTime)
         }
         else if (this.state.call_timer) {
             this.setState({call_timer: false})
@@ -164,17 +158,19 @@ export class CompareTwoOptions extends React.PureComponent{
             <div>
                 <OptionBox
                 index={1}
-                categories={this.props.categories}
+                categories={this.props.categories_to_choose}
                 attr1={this.state.attr_array[0]}
                 attr2={this.state.attr_array[1]}
+                disable={this.state.show_dialog_box}
                 default_msg={DEFAULT_MSG}
                 handleSubmit={this.handleSubmit}>
                 </OptionBox>
                 <OptionBox
                 index={2}
-                categories={this.props.categories}
+                categories={this.props.categories_to_choose}
                 attr1={this.state.attr_array[2]}
                 attr2={this.state.attr_array[3]}
+                disable={this.state.show_dialog_box}
                 default_msg={DEFAULT_MSG}
                 handleSubmit={this.handleSubmit}>
                 </OptionBox>
@@ -184,7 +180,7 @@ export class CompareTwoOptions extends React.PureComponent{
     
     render(){
         return(
-            <div>
+            <div className='compare-options-body'>
                 {this.showInstructions()}
                 {this.props.categories? this.showOptions() : null}
                 <button className='submit-abs' 

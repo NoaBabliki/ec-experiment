@@ -1,25 +1,20 @@
 import * as constants from '../constants'
 import '../App.css'
-import Dropdown from './DropDown'
 import 'react-slidedown/lib/slidedown.css'
+import SelectOptionTable from './SelectOptionTable'
 
 
 const OptionBox = (props) => {
 
 
     const showSlider = (title, index) => {
-        let names = []
-        const default_msg = {
-            id: -1,
-            name: props.default_msg,
-        }
-        names.push(default_msg)
-        props.categories[index].map(item => names.push(item))
-        //console.log(names)
         return(
-            <Dropdown
-            categories={names}
+            <SelectOptionTable
+            category={props.categories[index]}
+            index={props.index}
             title={title}
+            default_msg={props.default_msg}
+            disable={props.disable}
             handleSubmit={props.handleSubmit}/>
         )
     }

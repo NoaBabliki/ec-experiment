@@ -7,10 +7,8 @@ export class RateOptions extends React.Component{
     constructor(props){
         super(props)
         const data = this.props.categories[this.props.index].sort(function(){ return Math.random() - 0.5});
-        console.log('all data:', data)
         const paginatedData = data.filter(item => item.id < this.props.max_id)
         const restOfData = data.filter(item => item.id >= this.props.max_id)
-        console.log('paginated:',paginatedData,'rest of data',restOfData)
         this.state = {
             category_items: paginatedData,
             rest_of_data: restOfData,
@@ -23,7 +21,6 @@ export class RateOptions extends React.Component{
         let new_category_items = this.state.category_items.slice(0)
         new_category_items[this.state.cur_option_index] = new_option
         let new_categpry_items_full = new_category_items.concat(this.state.rest_of_data)
-        console.log('new category items - full', new_categpry_items_full)
         this.props.setCategories(new_categpry_items_full)
         if (this.state.cur_option_index + 1 < this.state.category_items.length){
             this.setState({

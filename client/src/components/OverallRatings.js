@@ -16,13 +16,11 @@ export class OverallRatings extends React.Component {
 
     createRatingArray(){
         const options = this.props.client_categories[this.props.index]
-        console.log("options from create array:",options)
         const num_options = options.length
         let ratings = new Array(num_options + 1).fill(0)
         for (let i = INDEX_DEV; i<num_options+INDEX_DEV; i++){
             ratings[i] = options[i-INDEX_DEV].rating
         }
-        console.log("ratings from createRating",ratings)
         return (ratings)
     }
 
@@ -41,7 +39,6 @@ export class OverallRatings extends React.Component {
         var two_d_data = []
         const category_arr_copy = this.props.client_categories[this.props.index].slice(0)
         while(category_arr_copy.length) two_d_data.push(category_arr_copy.splice(0,n_cols));
-       // console.log(two_d_data)
         return (
             <div>
             <table className='table-no-border'>
@@ -62,7 +59,7 @@ export class OverallRatings extends React.Component {
             <h4 className='option-name'>{option.name}:</h4>
             {option? 
             <Slider
-                key={option.id.toString()}
+                key={option.id}
                 index={index}
                 disabled={false}
                 default_rating={option.rating}
@@ -74,13 +71,10 @@ export class OverallRatings extends React.Component {
 
     nextButtonAction(){
         const options = this.props.client_categories[this.props.index]
-       // console.log('client categories from next button:', options)
         const num_options = options.length
         let newOptions = options.slice(0)
         for (let i = 0; i < num_options; i++){
             newOptions[i].rating = this.state.ratings[i + INDEX_DEV]
-            //console.log('rating at index', i+INDEX_DEV, 'is', this.state.ratings[i+INDEX_DEV])
-            //console.log('category:', newOptions[i], 'new rating:', this.state.ratings[i+INDEX_DEV])
         }
         this.props.setCategories(newOptions)
         this.props.setFlow()
