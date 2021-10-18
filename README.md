@@ -21,8 +21,6 @@ item2
 item3
 ....
 
-in server/outputs: client_category1.json, client_category2.json
-outputs of the program - seperate json file for each category, for current participent
+in server/outputs: client_category1.json, client_category2.json, equivalent_choices.json.
+outputs of the program - seperate json file for each category, for current participent + the choises vectors are in json array format.
 has fields: id - number (for programming usage), name - string (the name of the item - specified in inputs), rating - the rating the client gave to the item
-
-I hope by next week I will finish this part and I will show you a run via zoom, so we will be sure this is ok.
